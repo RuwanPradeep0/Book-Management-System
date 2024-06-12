@@ -1,10 +1,13 @@
 package com.ruwan.BookNetwork.auth;
 
+import com.ruwan.BookNetwork.email.EmailService;
+import com.ruwan.BookNetwork.email.EmailTemplateName;
 import com.ruwan.BookNetwork.role.RoleRepository;
 import com.ruwan.BookNetwork.user.Token;
 import com.ruwan.BookNetwork.user.TokenRepository;
 import com.ruwan.BookNetwork.user.User;
 import com.ruwan.BookNetwork.user.UserRepository;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,7 +24,10 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
-    public void register(RegistrationRequest registrationRequest) {
+    private final EmailService emailService;
+    private String activationUrl = "http://localhost:3000/activate-account";
+
+    public void register(RegistrationRequest registrationRequest) throws MessagingException {
         var userRole = roleRepository.findByName("USER")
                 .orElseThrow(() -> new IllegalStateException("ROLE USER was not initialized"));
 
@@ -40,8 +46,17 @@ public class AuthenticationService {
 
     }
 
-    private void sendValidationEmail(User user) {
-        var token = generateAndSaveActivationToken(user);
+    private void sendValidationEmail(User user) throws MessagingException {
+        var newToken = generateAndSaveActivationToken(user);
+
+        emailService.sendEmail(
+                user.getEmail(),
+                user.fullName(),
+                EmailTemplateName.ACTIVATE_ACCOUNT,
+                activationUrl,
+                newToken,
+                "Account activation"
+        );
 
     }
 
