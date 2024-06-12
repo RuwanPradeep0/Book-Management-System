@@ -3,16 +3,31 @@ spring:
     url: jdbc:mysql://localhost:3300/book_management?createDatabaseIfNotExist=true
     username: root
     password: 123456
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver # Correct driver class name
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     database: mysql
     show-sql: true
 
+  mail:
+    host: localhost
+    port: 1025
+    username: Ruwan
+    password: 12345
+    properties:
+      mail:
+        smtp:
+          trust: "*"
+        auth: true
+        starttls:
+          enabled: true
+        connectiontimeout: 5000
+        timeout: 3000
+        writetimeout: 5000
 
-    application:
-      security:
-        jwt:
-          secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250646367566B5970
-          expiration: 8640000
+application:
+  security:
+    jwt:
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250646367566B5970
+      expiration: 8640000
