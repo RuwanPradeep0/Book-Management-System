@@ -3,17 +3,21 @@ package com.ruwan.BookNetwork.auth;
 import com.ruwan.BookNetwork.email.EmailService;
 import com.ruwan.BookNetwork.email.EmailTemplateName;
 import com.ruwan.BookNetwork.role.RoleRepository;
+import com.ruwan.BookNetwork.security.JwtService;
 import com.ruwan.BookNetwork.user.Token;
 import com.ruwan.BookNetwork.user.TokenRepository;
 import com.ruwan.BookNetwork.user.User;
 import com.ruwan.BookNetwork.user.UserRepository;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -25,7 +29,26 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
     private final EmailService emailService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
     private String activationUrl = "http://localhost:3000/activate-account";
+
+    public static AuthenticationResponsse authenticate(AuthenticationRequest authenticationRequest) {
+        var auth = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        authenticationRequest.getEmail(),
+                        authenticationRequest.getPassword()
+                )
+        );
+
+        var claims = new HashMap<String, Object>();
+        var user = ((User) auth.getPrincipal());
+        claims.put("fullName", user.fullName());
+        var jwtToken = jwtService.generateToken(claims, user);
+        return AuthenticationResponsse.builder()
+                .token(jwtToken)
+                .build();
+    }
 
     public void register(RegistrationRequest registrationRequest) throws MessagingException {
         var userRole = roleRepository.findByName("USER")
@@ -43,7 +66,6 @@ public class AuthenticationService {
 
         userRepository.save(user);
         sendValidationEmail(user);
-
     }
 
     private void sendValidationEmail(User user) throws MessagingException {
@@ -57,11 +79,9 @@ public class AuthenticationService {
                 newToken,
                 "Account activation"
         );
-
     }
 
     private String generateAndSaveActivationToken(User user) {
-
         String generatedToken = generateActivationToken(6);
         var token = Token.builder()
                 .token(generatedToken)
@@ -75,16 +95,16 @@ public class AuthenticationService {
     }
 
     private String generateActivationToken(int length) {
-
         String characters = "0123456789";
         StringBuilder tokenBuilder = new StringBuilder();
         SecureRandom secureRandom = new SecureRandom();
-        for (int i = 0 ; i <length ; i++){
+        for (int i = 0; i < length; i++) {
             int randomIndex = secureRandom.nextInt(characters.length());
             tokenBuilder.append(characters.charAt(randomIndex));
-
         }
         return tokenBuilder.toString();
-
     }
 }
+
+
+
