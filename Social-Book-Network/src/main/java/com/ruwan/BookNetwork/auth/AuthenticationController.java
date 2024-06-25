@@ -8,15 +8,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/reservations/auth")
+@RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthenticationController {
 
     private final AuthenticationService service;
 
+    @GetMapping("/test")
+    public ResponseEntity<String> test() {
+        System.out.println("Test endpoint hit");
+        return ResponseEntity.ok("Test successful");
+    }
+
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public ResponseEntity<?> register(@RequestBody @Valid RegistrationRequest registrationRequest) throws MessagingException {
+        System.out.println("Register endpoint hit"); // Add this line
         service.register(registrationRequest);
         return ResponseEntity.accepted().build();
     }
@@ -24,6 +31,8 @@ public class AuthenticationController {
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponsse> authenticate(
             @RequestBody @Valid AuthenticationRequest authenticationRequest){
+
+        System.out.println("Test endpoint hit");
         return ResponseEntity.ok(service.authenticate(authenticationRequest));
     }
 

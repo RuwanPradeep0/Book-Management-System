@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   mysql:
     container_name: mysql-bms
@@ -8,7 +10,7 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
     ports:
-      - "3309:3306" # Map container's 3306 to host's 3300
+      - "3309:3306"  # Map container's 3306 to host's 3309
     networks:
       - spring-demo
     restart: unless-stopped
@@ -19,6 +21,8 @@ services:
     ports:
       - "1080:1080"
       - "1025:1025"
+    networks:
+      - spring-demo
 
 networks:
   spring-demo:

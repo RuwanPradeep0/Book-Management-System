@@ -9,10 +9,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
 
-@EnableJpaAuditing
+
 @SpringBootApplication
-@EnableAsync
+
 public class SocialBookNetworkApiApplication {
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(SocialBookNetworkApiApplication.class, args);

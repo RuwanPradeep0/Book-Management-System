@@ -36,20 +36,29 @@ public class AuthenticationService {
     private String activationUrl = "http://localhost:3000/activate-account";
 
     public AuthenticationResponsse authenticate(AuthenticationRequest authenticationRequest) {
-        var auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        authenticationRequest.getEmail(),
-                        authenticationRequest.getPassword()
-                )
-        );
+        System.out.println("calling");
+        try {
+            System.out.println("Attempting authentication for email: " + authenticationRequest.getEmail());
+            var auth = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            authenticationRequest.getEmail(),
+                            authenticationRequest.getPassword()
+                    )
+            );
+            System.out.println("Authentication successful");
 
-        var claims = new HashMap<String, Object>();
-        var user = ((User) auth.getPrincipal());
-        claims.put("fullName", user.fullName());
-        var jwtToken = jwtService.generateToken(claims, user);
-        return AuthenticationResponsse.builder()
-                .token(jwtToken)
-                .build();
+            var claims = new HashMap<String, Object>();
+            var user = ((User) auth.getPrincipal());
+            claims.put("fullName", user.fullName());
+            var jwtToken = jwtService.generateToken(claims, user);
+            System.out.println("Token generated: " + jwtToken);
+            return AuthenticationResponsse.builder()
+                    .token(jwtToken)
+                    .build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     public void register(RegistrationRequest registrationRequest) throws MessagingException {
@@ -60,6 +69,7 @@ public class AuthenticationService {
                 .firstName(registrationRequest.getFirstname())
                 .lastname(registrationRequest.getLastname())
                 .email(registrationRequest.getEmail())
+                .createdDate(LocalDateTime.now())
                 .password(passwordEncoder.encode(registrationRequest.getPassword()))
                 .accountLocked(false)
                 .enabled(false)
@@ -107,7 +117,7 @@ public class AuthenticationService {
         return tokenBuilder.toString();
     }
 
-    @Transactional
+//    @Transactional
     public void activateAccount(String token) throws MessagingException {
         Token savedToken = tokenRepository.findByToken(token)
                 .orElseThrow(() -> new RuntimeException("Invalid token"));
