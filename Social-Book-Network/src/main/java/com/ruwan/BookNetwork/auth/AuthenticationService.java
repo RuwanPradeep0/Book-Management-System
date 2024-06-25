@@ -36,7 +36,7 @@ public class AuthenticationService {
     private String activationUrl = "http://localhost:3000/activate-account";
 
     public AuthenticationResponsse authenticate(AuthenticationRequest authenticationRequest) {
-        System.out.println("calling");
+
         try {
             System.out.println("Attempting authentication for email: " + authenticationRequest.getEmail());
             var auth = authenticationManager.authenticate(
@@ -45,7 +45,7 @@ public class AuthenticationService {
                             authenticationRequest.getPassword()
                     )
             );
-            System.out.println("Authentication successful");
+
 
             var claims = new HashMap<String, Object>();
             var user = ((User) auth.getPrincipal());
