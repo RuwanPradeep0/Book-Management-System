@@ -1,8 +1,11 @@
-package com.ruwan.BookNetwork.book;
+package com.ruwan.BookNetwork.feedback;
 
 import com.ruwan.BookNetwork.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -17,22 +20,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Book extends BaseEntity {
+public class Feedback extends BaseEntity {
 
 
-    private String title;
-
-    private String authorName;
-
-    private String synopsis;
-
-    private String bookCover;
-
-    private boolean archived;
-
-    private boolean shareable;
-
-
-
+    private double note;
+    private String comment;
 
 }
