@@ -1,7 +1,10 @@
 package com.ruwan.BookNetwork.book;
 
 import com.ruwan.BookNetwork.common.BaseEntity;
+import com.ruwan.BookNetwork.user.User;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,8 +19,13 @@ import lombok.experimental.SuperBuilder;
 @Entity
 public class BookTransactionHistory extends BaseEntity {
 
-    //user relationship
-    //book relationship
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "book_id")
+    private Book book;
 
     private boolean returned;
 
