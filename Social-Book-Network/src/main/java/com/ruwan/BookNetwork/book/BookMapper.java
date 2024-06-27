@@ -15,4 +15,8 @@ public class BookMapper {
                 .build();
 
     }
+
+    public BookResponse toBookResponse(Book book) {
+        return BookResponse.builder().build();
+    }
 }
