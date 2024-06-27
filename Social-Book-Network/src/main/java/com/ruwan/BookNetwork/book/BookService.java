@@ -26,7 +26,7 @@ public class BookService {
 
         return bookRepository.findById(bookId)
                 .map(bookMapper :: toBookResponse)
-                .orElseThrow(() -> new EntityNotFoundException("No Book fiond with the id ::" + bookId))
+                .orElseThrow(() -> new EntityNotFoundException("No Book fiond with the id ::" + bookId));
 
 
     }
