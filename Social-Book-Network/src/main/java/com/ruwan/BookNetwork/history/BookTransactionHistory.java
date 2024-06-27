@@ -1,5 +1,6 @@
-package com.ruwan.BookNetwork.book;
+package com.ruwan.BookNetwork.history;
 
+import com.ruwan.BookNetwork.book.Book;
 import com.ruwan.BookNetwork.common.BaseEntity;
 import com.ruwan.BookNetwork.user.User;
 import jakarta.persistence.Entity;

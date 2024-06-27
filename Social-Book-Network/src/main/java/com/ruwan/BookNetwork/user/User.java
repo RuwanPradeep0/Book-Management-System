@@ -1,7 +1,7 @@
 package com.ruwan.BookNetwork.user;
 
 import com.ruwan.BookNetwork.book.Book;
-import com.ruwan.BookNetwork.book.BookTransactionHistory;
+import com.ruwan.BookNetwork.history.BookTransactionHistory;
 import com.ruwan.BookNetwork.role.Role;
 import jakarta.persistence.*;
 import lombok.*;
