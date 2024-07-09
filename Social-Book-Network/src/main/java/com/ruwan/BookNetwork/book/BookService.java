@@ -1,6 +1,7 @@
 package com.ruwan.BookNetwork.book;
 
 import com.ruwan.BookNetwork.common.PageResponse;
+import com.ruwan.BookNetwork.exception.OperationNotPermittedException;
 import com.ruwan.BookNetwork.history.BookTransactionHistory;
 import com.ruwan.BookNetwork.history.BookTransactionHistoryRepository;
 import com.ruwan.BookNetwork.user.User;
@@ -130,10 +131,23 @@ public class BookService {
                 .orElseThrow(() -> new EntityNotFoundException("No book found"));
 
         User user = ((User) connectedUser.getPrincipal());
-        if(!Objects.equals(book.getOwner().getBooks() ,  user.getId())){
+        if(!Objects.equals(book.getOwner().getId() ,  user.getId())){
             throw new OperationNotPermittedException("You can not update books shareable status");
         }
         book.setShareable(!book.isShareable());
+        bookRepository.save(book);
+        return bookId;
+    }
+
+    public Integer updateArchivedStatus(Integer bookId, Authentication connectedUser) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new EntityNotFoundException("No book found"));
+
+        User user = ((User) connectedUser.getPrincipal());
+        if(!Objects.equals(book.getOwner().getId() ,  user.getId())){
+            throw new OperationNotPermittedException("You can not update books archived status");
+        }
+        book.setArchived(!book.isArchived());
         bookRepository.save(book);
         return bookId;
     }
