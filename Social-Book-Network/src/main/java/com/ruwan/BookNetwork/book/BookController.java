@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.annotation.RequestScope;
 
 @RestController
 @RequestMapping("/api/v1/books")
@@ -67,6 +66,14 @@ public class BookController {
             Authentication connectedUser
     ){
         return ResponseEntity.ok(service.findAllReturnedBooks(page , size , connectedUser));
+    }
+
+    @PatchMapping("/shareable/{book-id}")
+    public ResponseEntity<Integer> updateShareableStatus(
+            @PathVariable("book-id") Integer bookId,
+            Authentication connectedUser
+    ){
+        return ResponseEntity.ok(service.updateShareableStatus(bookId , connectedUser));
     }
 
 }
