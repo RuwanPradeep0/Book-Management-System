@@ -23,7 +23,7 @@ public class JwtService {
 
     private final long jwtExpiration = 8640000;
 
-//    @Value("@{spring.jpa.application.security.jwt.secret-key}")
+    //    @Value("@{spring.jpa.application.security.jwt.secret-key}")
     private String secretKey ="404E635266556A586E3272357538782F413F4428472B4B6250646367566B5970";
 
 
