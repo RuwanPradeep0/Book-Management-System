@@ -1,6 +1,8 @@
 package com.ruwan.BookNetwork.book;
 
+import com.ruwan.BookNetwork.file.FileUtilities;
 import com.ruwan.BookNetwork.history.BookTransactionHistory;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,7 +30,7 @@ public class BookMapper {
                 .archived(book.isArchived())
                 .shareable(book.isShareable())
                 .owner(book.getOwner().fullName())
-                //todo : implement cover
+                .cover(FileUtilities.readFileFromLocation(book.getBookCover()))
                 .build();
     }
 
